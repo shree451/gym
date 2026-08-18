@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V R Fitness | Transform Your Body</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        matte: "#0B0B0C",
+                        charcoal: "#171719",
+                        neonRed: "#FF003C",
+                        electricBlue: "#00F0FF",
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-red': '0 0 25px rgba(255, 0, 60, 0.4)',
+                        'neon-blue': '0 0 25px rgba(0, 240, 255, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Glassmorphism & Scrollbar -->
+    <style>
+        body { background-color: #0B0B0C; color: white; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0B0B0C; }
+        ::-webkit-scrollbar-thumb { background: #171719; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF003C; }
+        .glass { background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
+    </style>
+
+    <!-- React & Babel CDNs -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Framer Motion CDN -->
+    <script src="https://unpkg.com/framer-motion@10.12.16/dist/framer-motion.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { motion, AnimatePresence } = window.Motion;
+
+        // ==========================================
+        // BACKEND SIMULATION LAYER (Python & Java)
+        // ==========================================
+        const BackendAPI = {
+            // Simulates Python FastAPI AI Coach
+            askAI: async (query) => {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        let q = query.toLowerCase();
+                        if (q.includes("diet") || q.includes("food") || q.includes("eat")) {
+                            resolve("AI: For muscle gain, maintain a caloric surplus of 300-500 kcal. Eat 2g of protein per kg of bodyweight. Lean chicken, fish, and whey are excellent sources.");
+                        } else if (q.includes("workout") || q.includes("split")) {
+                            resolve("AI: A standard 4-day split: Mon (Chest/Triceps), Tue (Back/Biceps), Thu (Legs), Fri (Shoulders/Core). Focus on progressive overload!");
+                        } else if (q.includes("bmi") || q.includes("weight")) {
+                            resolve("AI: To calculate BMI accurately, divide your weight (kg) by your height squared (m²). A healthy range is 18.5 - 24.9. Want a custom plan?");
+                        } else {
+                            resolve("AI: I am analyzing your fitness profile. Keep pushing your limits at V R Fitness! How else can I assist your transformation?");
+                        }
+                    }, 1200); // Simulated network delay
+                });
+            },
+            // Simulates Java Spring Boot Core API + MySQL
+            joinMembership: async (userData) => {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        const memberId = "VR" + Math.floor(1000 + Math.random() * 9000);
+                        resolve({ status: "success", memberId: memberId, message: "Welcome to V R Fitness!" });
+                    }, 1500);
+                });
+            }
+        };
+
+        // ==========================================
+        // UI COMPONENTS
+        // ==========================================
+
+        // 1. Navigation Bar
+        const Navbar = () => (
+            <nav className="fixed w-full z-50 glass py-4 px-6 transition-all duration-300">
+                <div className="container mx-auto flex justify-between items-center">
+                    <h1 className="text-2xl font-display font-bold tracking-widest text-white">
+                        V R <span className="text-neonRed">FITNESS</span>
+                    </h1>
+                    <div className="hidden md:flex gap-8 text-sm font-semibold tracking-wide text-gray-300">
+                        <a href="#home" className="hover:text-electricBlue transition-colors">HOME</a>
+                        <a href="#programs" className="hover:text-electricBlue transition-colors">PROGRAMS</a>
+                        <a href="#ai" className="hover:text-electricBlue transition-colors">AI COACH</a>
+                        <a href="#memberships" className="hover:text-electricBlue transition-colors">MEMBERSHIPS</a>
+                    </div>
+                    <button className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-full border border-white/10 transition-all font-semibold text-sm">
+                        MEMBER LOGIN
+                    </button>
+                </div>
+            </nav>
+        );
+
+        // 2. Hero Section
+        const Hero = () => (
+            <section id="home" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+                {/* Fallback gradient if video fails */}
+                <div className="absolute inset-0 bg-gradient-to-br from-charcoal to-matte z-0"></div>
+                
+                {/* Background Video */}
+                <video autoPlay loop muted className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-screen z-0">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-man-training-with-a-kettlebell-in-a-gym-44754-large.mp4" type="video/mp4" />
+                </video>
+                <div className="absolute inset-0 bg-gradient-to-t from-matte via-transparent to-transparent z-10"></div>
+
+                <div className="relative z-20 text-center px-4 max-w-5xl mx-auto mt-20">
+                    <motion.h1 
+                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}
+                        className="text-6xl md:text-8xl font-display font-black text-white uppercase tracking-tighter mb-4"
+                    >
+                        Transform <span className="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-electricBlue">Your Body</span>
+                    </motion.h1>
+                    <motion.p 
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 1 }}
+                        className="text-xl md:text-2xl text-gray-400 font-light mb-10"
+                    >
+                        Elevate Your Life. State-of-the-art equipment, AI-driven plans, and a fitness experience designed for champions.
+                    </motion.p>
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.8, duration: 0.5 }}
+                        className="flex flex-col sm:flex-row justify-center gap-6"
+                    >
+                        <a href="#memberships" className="px-10 py-4 bg-neonRed text-white font-bold text-lg rounded-full hover:shadow-neon-red transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide">
+                            Join The Elite
+                        </a>
+                        <a href="#ai" className="px-10 py-4 glass text-white font-bold text-lg rounded-full hover:border-electricBlue hover:text-electricBlue transition-all duration-300 uppercase tracking-wide">
+                            Try AI Coach
+                        </a>
+                    </motion.div>
+                </div>
+            </section>
+        );
+
+        // 3. AI Coach Section (Python Integration Simulation)
+        const AICoach = () => {
+            const [prompt, setPrompt] = useState("");
+            const [chat, setChat] = useState([{ sender: "ai", text: "Hello! I am your V R AI Fitness Coach. Ask me for workout plans, diet tips, or BMI calculations." }]);
+            const [loading, setLoading] = useState(false);
+
+            const handleSend = async () => {
+                if(!prompt.trim()) return;
+                const userMsg = prompt;
+                setPrompt("");
+                setChat(prev => [...prev, { sender: "user", text: userMsg }]);
+                setLoading(true);
+                
+                // Simulate Python FastAPI call
+                const aiResponse = await BackendAPI.askAI(userMsg);
+                
+                setChat(prev => [...prev, { sender: "ai", text: aiResponse }]);
+                setLoading(false);
+            };
+
+            return (
+                <section id="ai" className="py-24 bg-matte relative overflow-hidden">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-electricBlue/10 rounded-full blur-[120px] z-0"></div>
+                    <div className="container mx-auto px-6 max-w-4xl relative z-10">
+                        <div className="text-center mb-12">
+                            <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-4">Smart <span className="text-electricBlue">AI Coach</span></h2>
+                            <p className="text-gray-400 text-lg">Powered by our custom Deep Learning Microservice</p>
+                        </div>
+                        
+                        <div className="glass rounded-3xl p-6 md:p-10 shadow-2xl border border-white/10">
+                            <div className="h-80 overflow-y-auto mb-6 flex flex-col gap-4 pr-2">
+                                {chat.map((msg, i) => (
+                                    <motion.div 
+                                        initial={{ opacity: 0, x: msg.sender === 'user' ? 20 : -20 }} 
+                                        animate={{ opacity: 1, x: 0 }}
+                                        key={i} 
+                                        className={`p-4 rounded-2xl max-w-[80%] ${msg.sender === 'user' ? 'bg-electricBlue/20 ml-auto border border-electricBlue/30 text-white' : 'bg-white/5 border border-white/10 text-gray-300'}`}
+                                    >
+                                        <p className="text-sm font-light leading-relaxed">{msg.text}</p>
+                                    </motion.div>
+                                ))}
+                                {loading && (
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-gray-300 w-32">
+                                        <div className="flex gap-2">
+                                            <span className="w-2 h-2 bg-electricBlue rounded-full animate-ping"></span>
+                                            <span className="w-2 h-2 bg-electricBlue rounded-full animate-ping delay-75"></span>
+                                            <span className="w-2 h-2 bg-electricBlue rounded-full animate-ping delay-150"></span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            <div className="flex gap-4">
+                                <input 
+                                    type="text" 
+                                    value={prompt}
+                                    onChange={(e) => setPrompt(e.target.value)}
+                                    onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                                    placeholder="Ask for a 4-day muscle building split..." 
+                                    className="flex-1 bg-charcoal border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-electricBlue focus:shadow-neon-blue transition-all"
+                                />
+                                <button onClick={handleSend} className="bg-electricBlue text-matte px-8 py-4 rounded-xl font-bold hover:shadow-neon-blue transition-all uppercase tracking-wide">
+                                    Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // 4. Memberships & Booking (Java Spring Boot Simulation)
+        const Memberships = () => {
+            const [selectedPlan, setSelectedPlan] = useState(null);
+            const [formData, setFormData] = useState({ name: "", email: "" });
+            const [joinStatus, setJoinStatus] = useState(null);
+            const [loading, setLoading] = useState(false);
+
+            const plans = [
+                { id: "BASIC", name: "Basic", price: "₹1,499", features: ["Gym Access", "Locker Access", "Free Wi-Fi"], color: "hover:border-electricBlue hover:shadow-neon-blue" },
+                { id: "PREMIUM", name: "Premium", price: "₹2,999", features: ["Gym Access", "Group Classes", "Diet Guidance", "Sauna Access"], color: "border-neonRed shadow-neon-red scale-105 z-10" },
+                { id: "ELITE", name: "Elite", price: "₹5,499", features: ["Personal Trainer", "Custom Diet Plan", "Priority Support", "App Premium"], color: "hover:border-electricBlue hover:shadow-neon-blue" }
+            ];
+
+            const handleJoin = async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                // Simulate Java API Call
+                const response = await BackendAPI.joinMembership({ ...formData, plan: selectedPlan.id });
+                setLoading(false);
+                setJoinStatus(response);
+            };
+
+            return (
+                <section id="memberships" className="py-24 bg-charcoal relative">
+                    <div className="container mx-auto px-6">
+                        <div className="text-center mb-16">
+                            <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-4">Choose Your <span className="text-neonRed">Arsenal</span></h2>
+                            <p className="text-gray-400 text-lg">Secure, encrypted transactions powered by enterprise Java architecture.</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
+                            {plans.map((plan, i) => (
+                                <motion.div 
+                                    key={i}
+                                    whileHover={{ y: -10 }}
+                                    className={`glass rounded-3xl p-8 border border-white/10 transition-all duration-300 relative overflow-hidden ${plan.color}`}
+                                >
+                                    <h3 className="text-2xl font-bold text-white mb-2 uppercase tracking-wide">{plan.name}</h3>
+                                    <div className="text-5xl font-display font-black text-white mb-6">{plan.price}<span className="text-sm text-gray-500 font-sans font-normal">/mo</span></div>
+                                    <ul className="space-y-4 mb-8">
+                                        {plan.features.map((feature, j) => (
+                                            <li key={j} className="flex items-center text-gray-300 font-light">
+                                                <svg className="w-5 h-5 text-electricBlue mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                                {feature}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <button 
+                                        onClick={() => { setSelectedPlan(plan); setJoinStatus(null); }}
+                                        className="w-full py-4 bg-white/5 border border-white/20 rounded-xl text-white font-bold hover:bg-white/10 hover:border-white/50 transition-all uppercase tracking-widest"
+                                    >
+                                        Select Plan
+                                    </button>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Registration Modal Overlay */}
+                    <AnimatePresence>
+                        {selectedPlan && (
+                            <motion.div 
+                                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                                className="fixed inset-0 z-50 flex items-center justify-center bg-matte/80 backdrop-blur-md px-4"
+                            >
+                                <div className="glass rounded-3xl p-8 max-w-md w-full border border-white/20 relative">
+                                    <button onClick={() => setSelectedPlan(null)} className="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
+                                    
+                                    {!joinStatus ? (
+                                        <form onSubmit={handleJoin}>
+                                            <h3 className="text-2xl font-display font-bold text-white mb-6">Join <span className="text-electricBlue">{selectedPlan.name}</span></h3>
+                                            <div className="space-y-4 mb-8">
+                                                <input required type="text" placeholder="Full Name" onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-charcoal border border-white/10 rounded-xl px-4 py-3 text-white focus:border-neonRed outline-none" />
+                                                <input required type="email" placeholder="Email Address" onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-charcoal border border-white/10 rounded-xl px-4 py-3 text-white focus:border-neonRed outline-none" />
+                                            </div>
+                                            <button type="submit" disabled={loading} className="w-full py-4 bg-neonRed text-white rounded-xl font-bold uppercase tracking-widest hover:shadow-neon-red transition-all flex justify-center">
+                                                {loading ? "Processing..." : `Pay ${selectedPlan.price}`}
+                                            </button>
+                                        </form>
+                                    ) : (
+                                        <div className="text-center py-8">
+                                            <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-500/50">
+                                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                            </div>
+                                            <h3 className="text-2xl font-bold text-white mb-2">Payment Successful!</h3>
+                                            <p className="text-gray-400 mb-4">{joinStatus.message}</p>
+                                            <div className="bg-charcoal p-4 rounded-xl border border-white/10 inline-block mb-6">
+                                                <p className="text-xs text-gray-500 uppercase">Member ID</p>
+                                                <p className="text-xl font-display font-bold text-electricBlue">{joinStatus.memberId}</p>
+                                            </div>
+                                            <button onClick={() => setSelectedPlan(null)} className="w-full py-3 glass text-white rounded-xl font-bold hover:bg-white/10">Close</button>
+                                        </div>
+                                    )}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </section>
+            );
+        };
+
+        // 5. Footer
+        const Footer = () => (
+            <footer className="bg-matte py-12 border-t border-white/10">
+                <div className="container mx-auto px-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+                    <div>
+                        <h1 className="text-3xl font-display font-bold text-white mb-2">V R <span className="text-neonRed">FITNESS</span></h1>
+                        <p className="text-gray-500 text-sm">© 2026 V R Fitness Club. All Rights Reserved.</p>
+                    </div>
+                    <div className="flex gap-6 mt-6 md:mt-0">
+                        <a href="#" className="text-gray-400 hover:text-white">Instagram</a>
+                        <a href="#" className="text-gray-400 hover:text-white">Twitter</a>
+                        <a href="#" className="text-gray-400 hover:text-white">WhatsApp</a>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        // ==========================================
+        // MAIN APP RENDERER
+        // ==========================================
+        const App = () => {
+            return (
+                <div className="font-sans antialiased text-white selection:bg-neonRed selection:text-white">
+                    <Navbar />
+                    <Hero />
+                    <AICoach />
+                    <Memberships />
+                    <Footer />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
